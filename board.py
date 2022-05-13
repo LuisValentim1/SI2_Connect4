@@ -76,11 +76,44 @@ class Board:
     # verify if there's any winning sequence 
     def checkWinner(self):
         self.gameState()
+        drawCheck = 0
         for seq in self.sequences:
             if seq.length == 4:
                 self.winner = seq.player
                 print("Player" + str(self.winner) + " wins!! ")
-                return True  
+                return True
+        for pos in self.positions:
+            if pos.fill != 0:
+                drawCheck = drawCheck+1
+        if drawCheck == 42:
+            self.winner == "draw"
+            return True
+
+    # get all the sequences with a given length 
+    def getSequencesWithLength(self, seqLen):
+        retSeqs = []
+        for seq in self.sequences:
+            if seq.length == seqLen:
+                retSeqs.append(seq)
+        return retSeqs
+
+    # get all the sequences from a given player 
+    def getSequencesFromPlayer(self, playerNum):
+        retSeqs = []
+        for seq in self.sequences:
+            if seq.player == playerNum:
+                retSeqs.append(seq)
+        return retSeqs
+
+    # get all sequences from a given player and that have a specified length 
+    def getSequencesFromPlayerWithLength(self, seqLen, playerNum):
+        retSeqs = []
+        for seq in self.sequences:
+            if seq.player == playerNum and seq.length==seqLen:
+                retSeqs.append(seq)
+        return retSeqs
+
+
 
 #def get_heuristic(grid, mark, config):
     #num_threes = count_windows(grid, 3, mark, config)
