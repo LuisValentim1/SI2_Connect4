@@ -22,7 +22,7 @@ class RLAgent:
         #Use this code when read and write on file working
         #
         #choice_rand = random.randint(0, 1)
-        #if choice_rand > self.epslon:
+        #if choice_rand < self.epslon:
         #   choice=random.randint(0, 6)
         #else:
         #    self.read_choice()
