@@ -1,4 +1,5 @@
 # Imports
+from rlAgent import RLAgent
 from sequence import Sequence
 from board import Board 
 from position import Position 
@@ -16,7 +17,6 @@ pygame.init()
 
 # Set up the drawing window and game board
 screen = pygame.display.set_mode([500, 500])
-gb = Board()
 
 # Set up text font and instances
 base_font = pygame.font.Font(None, 32)
@@ -42,11 +42,16 @@ validPlays = ["1", "2", "3", "4", "5", "6", "7"]
 # Agents initialization 
 a1 = LeftMostAgent()
 a2 = RightMostAgent()
-a3 = RandomAgent()
-a4 = RandomAgent()
+aRandom = RandomAgent()
+aRl = RLAgent()
 
-# Game simulator for agents to run automatically 
-sim = Simulator(a3, a4, 200, gb)
+#decide the players here
+p1 = aRl
+p2 = aRandom
+
+# Game board and simulator for agents to run automatically 
+gb = Board()
+sim = Simulator(p1, p2, 200, gb)
 
 
 

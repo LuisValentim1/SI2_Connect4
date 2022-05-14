@@ -23,7 +23,8 @@ class Board:
             if(pos.x == x and pos.fill == 0):
                 pos.placePiece(player)
                 return 7
-        #print("This column is full")
+        #invalid play
+        return 0
 
     # show the board pieces in place 
     def show(self, screen):
@@ -81,13 +82,17 @@ class Board:
             if seq.length == 4:
                 self.winner = seq.player
                 print("Player" + str(self.winner) + " wins!! ")
-                return True
+                return 1
+
         for pos in self.positions:
             if pos.fill != 0:
                 drawCheck = drawCheck+1
+
         if drawCheck == 42:
             self.winner == "draw"
-            return True
+            return 2
+        
+        return 0
 
     # get all the sequences with a given length 
     def getSequencesWithLength(self, seqLen):

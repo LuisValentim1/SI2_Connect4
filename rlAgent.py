@@ -6,6 +6,7 @@ class RLAgent:
         self.name = "RL Agent"
         self.reward = 0
         self.no_games = 0
+        self.no_seq3 = 0
 
     def play(self):
         #define rewards for each play
@@ -16,7 +17,8 @@ class RLAgent:
         #read
         choice= None
 
-        if self.no_games<100:
+        random_no_games = 100000 #change later
+        if self.no_games<random_no_games:
             choice=random.randint(0, 6)
         else:
             #read from file and choose the next move
@@ -33,24 +35,33 @@ class RLAgent:
 
         return choice
     
-    def seq3(self):
+    def seq3(self, no_seq3):
         #reward him for making a sequence of 3
-        self.reward +=100
+        if no_seq3 > self.no_seq3:
+            nseq3 = no_seq3 - self.no_seq3
+            self.no_seq3 = no_seq3
 
-    def wins(self):
+            self.reward += 100*nseq3
+
+    def wins(self, sequences):
         #if the last move wins the game reward him
         self.reward += 100000
         self.no_games += 1
+        self.reset()
 
     def loses(self):
         #if he loses reward him negatively
         self.reward -= 10000
     
-    def save_choice(self, file):
+    def save_choice(self, sequences, file):
         #store its choice on a file with its weight (reward)
         #store
 
         return
     
+    def check_sequences(self, sequences):
+        return
+    
     def reset(self):
         self.reward=0
+        self.no_seq3=0
