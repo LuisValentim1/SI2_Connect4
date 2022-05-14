@@ -45,13 +45,14 @@ class Simulator:
 
     # Check who won and register data accordingly 
     def checkWinner(self):
-        self.gameBoard.checkWinner()
+        choice = self.gameBoard.checkWinner()
         if(self.gameBoard.winner == 1):
             self.a1Wins += 1 
         if(self.gameBoard.winner == 2):
             self.a2Wins += 1
         if(self.gameBoard.winner == "draw"):
             self.numOfDraws += 1 
+        return choice
 
     # Method which runs the simulation 
     def run(self, screen):
@@ -69,20 +70,20 @@ class Simulator:
                 if move == 0:
                     self.gameBoard.winner = 2
                     if self.agent1.name == "RL Agent":    
-                        self.agent1.loses()
+                        self.agent1.loses(self.gameBoard.positions)
                 
                 #check for sequences of 3
                 if(self.agent1.name == "RL Agent"):
-                    self.agent1.seq3(self.gameBoard.getSequencesFromPlayerWithLength(1, 3).__len__())
+                    self.agent1.seq3(self.gameBoard.getSequencesFromPlayerWithLength(3, 1).__len__())
 
                 self.refresh(screen)
                 a1_win = self.checkWinner()
                 #self.printSequences()
                 if a1_win == 1 and self.agent1.name == "RL Agent":
-                    self.agent1.wins(self.gameBoard.getSequencesFromPlayer(1))
+                    self.agent1.wins(self.gameBoard.positions)
 
-                if a1_win ==1 and self.agent2.name == "RL Agent":
-                    self.agent2.loses()
+                if a1_win == 1 and self.agent2.name == "RL Agent":
+                    self.agent2.loses(self.gameBoard.positions)
 
                 #if there is no winner its player 2's turn
                 if self.gameBoard.winner == "":
@@ -90,21 +91,21 @@ class Simulator:
                     if move == 0:
                         self.gameBoard.winner = 1
                         if self.agent2.name == "RL Agent":    
-                            self.agent2.loses()
+                            self.agent2.loses(self.gameBoard.positions)
 
                     #check for sequences of 3
-                    if(self.agent2.name == "RL Agent"):
-                        self.agent2.seq3(self.gameBoard.getSequencesFromPlayerWithLength(2, 3).__len__())
+                    if self.agent2.name == "RL Agent":
+                        self.agent2.seq3(self.gameBoard.getSequencesFromPlayerWithLength(3, 2).__len__())
 
                     #self.printSequences()
                     self.refresh(screen)
                     a2_win = self.checkWinner()
-
+                    
                     if a2_win == 1 and self.agent2.name == "RL Agent":
-                        self.agent2.wins(self.gameBoard.getSequencesFromPlayer(2))
+                        self.agent2.wins(self.gameBoard.positions)
                         
                     if a2_win == 1 and self.agent1.name == "RL Agent":
-                        self.agent1.loses()
+                        self.agent1.loses(self.gameBoard.positions)
                     
             # After a match is over and a winner is decided we increment the matches count and reset the board         
             self.matchesPlayed += 1

@@ -49,31 +49,34 @@ class RLAgent:
 
             self.reward += 100*nseq3
 
-    def wins(self, sequences):
+    def wins(self, positions):
         #if the last move wins the game reward him
-        self.reward += 100000
-        self.no_games += 1
-        self.epslon *= 0.985
+        self.reward += 10000
 
-        #store on file
-        self.save_choice(self, sequences)
+        self.reset(positions)
 
-        self.reset()
-
-    def loses(self):
+    def loses(self, positions):
         #if he loses reward him negatively
         self.reward -= 10000
+
+        self.reset(positions)
     
     def read_choice(self):
         #read from file and choose the next move
         #depending on the weights stored for each possible decision (in this case 7)
         return
 
-    def save_choice(self, sequences):
+    def save_choice(self, positions):
         #store its choice on a file with its weight (reward)
         
         return
     
-    def reset(self):
+    def reset(self, positions):
+        self.no_games += 1
+        self.epslon *= 0.985
+
+        #store on file
+        self.save_choice(positions)
+
         self.reward=0
         self.no_seq3=0
