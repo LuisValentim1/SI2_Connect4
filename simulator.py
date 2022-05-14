@@ -66,8 +66,10 @@ class Simulator:
                 # 0 is the return on an invalid play, so if a player makes an invalid move 
                 # such as trying to play in a filled column or a non valid input the system will ask for a new play
                 move = self.gameBoard.placePiece(self.agent1.play(), 1)
-                while move == 0:    
-                    move = self.gameBoard.placePiece(self.agent1.play(), 1)
+                if move == 0:
+                    self.gameBoard.winner = 2
+                    if self.agent1.name == "RL Agent":    
+                        self.agent1.loses()
                 
                 #check for sequences of 3
                 if(self.agent1.name == "RL Agent"):
@@ -85,9 +87,10 @@ class Simulator:
                 #if there is no winner its player 2's turn
                 if self.gameBoard.winner == "":
                     move = self.gameBoard.placePiece(self.agent2.play(), 2)
-                    while move == 0:
-                        #move = self.gameBoard.placePiece(self.agent2.newPlay(move), 2)
-                        move = self.gameBoard.placePiece(self.agent2.play(), 2)
+                    if move == 0:
+                        self.gameBoard.winner = 1
+                        if self.agent2.name == "RL Agent":    
+                            self.agent2.loses()
 
                     #check for sequences of 3
                     if(self.agent2.name == "RL Agent"):

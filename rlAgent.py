@@ -19,11 +19,17 @@ class RLAgent:
         #read
         choice= None
 
-        random_no_games = 100000 #change later
-        if self.no_games<random_no_games:
-            choice=random.randint(0, 6)
-        else:
-            self.read_choice()
+        #Use this code when read and write on file working
+        #
+        #choice_rand = random.randint(0, 1)
+        #if choice_rand > self.epslon:
+        #   choice=random.randint(0, 6)
+        #else:
+        #    self.read_choice()
+
+        #and remove this 
+        choice=random.randint(0, 6)
+        
 
         #confirm final reward for the choice
         #
