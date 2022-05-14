@@ -7,6 +7,8 @@ class RLAgent:
         self.reward = 0
         self.no_games = 0
         self.no_seq3 = 0
+        self.file = None
+        self.epslon = 1
 
     def play(self):
         #define rewards for each play
@@ -21,9 +23,7 @@ class RLAgent:
         if self.no_games<random_no_games:
             choice=random.randint(0, 6)
         else:
-            #read from file and choose the next move
-            #depending on the weights stored for each possible decision (in this case 7)
-            None #change None with code for reading the file
+            self.read_choice()
 
         #confirm final reward for the choice
         #
@@ -31,7 +31,7 @@ class RLAgent:
 
         #needs to store its choice on a file with its weight (reward)
         #store
-        self.save_choice()
+        #self.save_choice()
 
         return choice
     
@@ -47,19 +47,25 @@ class RLAgent:
         #if the last move wins the game reward him
         self.reward += 100000
         self.no_games += 1
+        self.epslon *= 0.985
+
+        #store on file
+        self.save_choice(self, sequences)
+
         self.reset()
 
     def loses(self):
         #if he loses reward him negatively
         self.reward -= 10000
     
-    def save_choice(self, sequences, file):
-        #store its choice on a file with its weight (reward)
-        #store
-
+    def read_choice(self):
+        #read from file and choose the next move
+        #depending on the weights stored for each possible decision (in this case 7)
         return
-    
-    def check_sequences(self, sequences):
+
+    def save_choice(self, sequences):
+        #store its choice on a file with its weight (reward)
+        
         return
     
     def reset(self):

@@ -78,8 +78,9 @@ class Simulator:
                 #self.printSequences()
                 if a1_win == 1 and self.agent1.name == "RL Agent":
                     self.agent1.wins(self.gameBoard.getSequencesFromPlayer(1))
-                    if self.agent2.name == "RL Agent":
-                        self.agent2.loses()
+
+                if a1_win ==1 and self.agent2.name == "RL Agent":
+                    self.agent2.loses()
 
                 #if there is no winner its player 2's turn
                 if self.gameBoard.winner == "":
@@ -98,8 +99,9 @@ class Simulator:
 
                     if a2_win == 1 and self.agent2.name == "RL Agent":
                         self.agent2.wins(self.gameBoard.getSequencesFromPlayer(2))
-                        if self.agent1.name == "RL Agent":
-                            self.agent1.loses()
+                        
+                    if a2_win == 1 and self.agent1.name == "RL Agent":
+                        self.agent1.loses()
                     
             # After a match is over and a winner is decided we increment the matches count and reset the board         
             self.matchesPlayed += 1
