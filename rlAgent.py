@@ -15,25 +15,27 @@ class RLAgent:
         self.learning_rate = 0.1
         self.moves = []
 
-    def play(self, board):
+    def play(self, board, move_dict):
         #define rewards for each play
 
         #reward him for playing
         self.reward += 1 
 
+
+        #[print(b.print()) for b in board]
         #read
         choice= None
 
         #Use this code when read and write on file working
         #
-        #choice_rand = random.randint(0, 1)
-        #if choice_rand < self.epslon:
-        #   choice=random.randint(0, 6)
-        #else:
-        #    self.read_choice()
+        choice_rand = random.randint(0, 1)
+        if choice_rand < self.epslon:
+           choice=random.randint(0, 6)
+        else:
+            choice = self.read_choice(board, move_dict)
 
         #and remove this 
-        choice=random.randint(0, 6)
+        #choice=random.randint(0, 6)
 
         #confirm final reward for the choice
         #
@@ -65,10 +67,25 @@ class RLAgent:
 
         self.reset(positions, move_dict)
     
-    def read_choice(self):
+    def read_choice(self, board, move_dict):
+        choices = []
+        for row in range(7):
+            for col in range(6):
+                if board[col * 7 + row].fill == 0:
+                    new_board = [b.copy() for b in board]
+                    #TODO CHANGE TO THE NUMBER OF THE AGENT
+                    new_board[col * 7 + row].fill = 1
+                    move = self.find_move_using_board(new_board, move_dict)
+                    move.choice = row
+                    choices.append(move)
+                    break
         #read from file and choose the next move
         #depending on the weights stored for each possible decision (in this case 7)
-        return
+
+        rewards = [c.reward for c in choices]
+        max_value = max(rewards)
+        index = rewards.index(max_value)
+        return index
 
     def save_choice(self, positions, move_dict):
         #store its choice on a file with its weight (reward)
@@ -85,14 +102,14 @@ class RLAgent:
     def find_move_using_board(self, board, move_dict: dict):
         _sum = Move.calc_sum_board(board)
         if _sum not in move_dict.keys():
-            move_dict[_sum] = [Move([b.copy() for b in board], 0)]
+            move_dict[_sum] = [Move([b.copy() for b in board], 0, -1)]
             return move_dict[_sum][0]
         else:
             for i, move in enumerate(move_dict[_sum]):
                 if board == move.board_state:
                     move.reward += 1
                     return move
-            move_dict[_sum] += [Move([b.copy() for b in board], 0)]
+            move_dict[_sum] += [Move([b.copy() for b in board], 0, -1)]
             return move_dict[_sum][-1]
 
     def print_board(self,board):

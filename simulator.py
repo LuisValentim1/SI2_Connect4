@@ -1,3 +1,5 @@
+import pickle
+
 from sequence import Sequence
 from board import Board
 from position import Position
@@ -19,6 +21,14 @@ class Simulator:
         self.a1WinPercentage = 0
         self.a2WinPercentage = 0
         self.move_dict = {}
+        with open(agent1.file,"rb") as f:
+            self.move_dict = pickle.load(f)
+        counter = 0
+        for key in self.move_dict.keys():
+            counter += len(self.move_dict[key])
+
+        print(counter)
+
 
     # Calculating win percentage of each AI 
     def calcWinRates(self):
@@ -43,7 +53,7 @@ class Simulator:
         screen.fill((50, 50, 255))
         self.gameBoard.show(screen)
         pygame.display.flip()
-        pygame.time.wait(200)
+        pygame.time.wait(100)
 
     # Check who won and register data accordingly 
     def checkWinner(self):
@@ -61,14 +71,14 @@ class Simulator:
 
         # Run for as long as the matches played is inferior the the total number of matches 
         while self.matchesPlayed < self.numOfMatches:
-
+            pygame.event.pump()
             # Run a match for as long as the winner is not decided 
             while self.gameBoard.winner == "":
 
                 # Each agent takes turns making a move, the system verifies if someone won and refreshes the board after every move
                 # 0 is the return on an invalid play, so if a player makes an invalid move 
                 # such as trying to play in a filled column or a non valid input the system will ask for a new play
-                move = self.gameBoard.placePiece(self.agent1.play(self.gameBoard.positions), 1)
+                move = self.gameBoard.placePiece(self.agent1.play(self.gameBoard.positions, self.move_dict), 1)
                 if move == 0:
                     self.gameBoard.winner = 2
                     if self.agent1.name == "RL Agent":
@@ -90,7 +100,7 @@ class Simulator:
 
                 # if there is no winner its player 2's turn
                 if self.gameBoard.winner == "":
-                    move = self.gameBoard.placePiece(self.agent2.play(self.gameBoard.positions), 2)
+                    move = self.gameBoard.placePiece(self.agent2.play(self.gameBoard.positions, self.move_dict), 2)
                     if move == 0:
                         self.gameBoard.winner = 1
                         if self.agent2.name == "RL Agent":
