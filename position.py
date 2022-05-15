@@ -38,3 +38,11 @@ class Position:
 
     def print(self):
         return "(" + str(self.x) + "," + str(self.y) + ")"
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y and self.fill == other.fill
+
+    def copy(self):
+        p = Position(self.x, self.y)
+        p.fill = self.fill
+        return p

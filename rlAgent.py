@@ -1,4 +1,7 @@
 import random
+from move import Move
+import pickle
+
 
 class RLAgent:
 
@@ -7,10 +10,12 @@ class RLAgent:
         self.reward = 0
         self.no_games = 0
         self.no_seq3 = 0
-        self.file = None
+        self.file = "RLAgent1"
         self.epslon = 1
+        self.learning_rate = 0.1
+        self.moves = []
 
-    def play(self):
+    def play(self, board):
         #define rewards for each play
 
         #reward him for playing
@@ -29,7 +34,6 @@ class RLAgent:
 
         #and remove this 
         choice=random.randint(0, 6)
-        
 
         #confirm final reward for the choice
         #
@@ -49,34 +53,59 @@ class RLAgent:
 
             self.reward += 100*nseq3
 
-    def wins(self, positions):
+    def wins(self, positions, move_dict):
         #if the last move wins the game reward him
         self.reward += 10000
 
-        self.reset(positions)
+        self.reset(positions, move_dict)
 
-    def loses(self, positions):
+    def loses(self, positions, move_dict):
         #if he loses reward him negatively
         self.reward -= 10000
 
-        self.reset(positions)
+        self.reset(positions, move_dict)
     
     def read_choice(self):
         #read from file and choose the next move
         #depending on the weights stored for each possible decision (in this case 7)
         return
 
-    def save_choice(self, positions):
+    def save_choice(self, positions, move_dict):
         #store its choice on a file with its weight (reward)
-        
+        with open(self.file, 'wb') as f:
+            pickle.dump(move_dict, f)
         return
-    
-    def reset(self, positions):
+
+    def add_move(self, board, move_dict):
+        move = self.find_move_using_board(board, move_dict)
+        # https://en.wikipedia.org/wiki/Q-learning
+        move.reward += self.learning_rate * (self.reward - move.reward)
+        self.moves.append(move)
+
+    def find_move_using_board(self, board, move_dict: dict):
+        _sum = Move.calc_sum_board(board)
+        if _sum not in move_dict.keys():
+            move_dict[_sum] = [Move([b.copy() for b in board], 0)]
+            return move_dict[_sum][0]
+        else:
+            for i, move in enumerate(move_dict[_sum]):
+                if board == move.board_state:
+                    move.reward += 1
+                    return move
+            move_dict[_sum] += [Move([b.copy() for b in board], 0)]
+            return move_dict[_sum][-1]
+
+    def print_board(self,board):
+        [print(b.fill,end=",") for b in board]
+
+    def reset(self, positions, move_dict):
         self.no_games += 1
         self.epslon *= 0.985
-
+        self.moves[-1].reward += self.learning_rate * (self.reward - self.moves[-1].reward)
+        print(self.moves)
         #store on file
-        self.save_choice(positions)
+        self.save_choice(positions, move_dict)
 
-        self.reward=0
-        self.no_seq3=0
+        self.moves = []
+        self.reward = 0
+        self.no_seq3 = 0
