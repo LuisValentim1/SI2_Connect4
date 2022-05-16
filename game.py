@@ -51,7 +51,7 @@ p2 = aRandom
 
 # Game board and simulator for agents to run automatically 
 gb = Board()
-sim = Simulator(p1, p2, 200, gb, "statsfile1.csv")
+sim = Simulator(p1, p2, 20000, gb, "statsfile1.csv")
 
 
 

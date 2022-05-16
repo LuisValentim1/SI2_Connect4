@@ -103,7 +103,7 @@ class RLAgent:
 
     def reset(self, move_dict):
         self.no_games += 1
-        self.epslon *= 0.985
+        self.epslon *= 0.9
         self.moves[-1].reward += self.learning_rate * (self.reward - self.moves[-1].reward)
         print(self.moves)
 

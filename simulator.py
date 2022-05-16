@@ -67,7 +67,7 @@ class Simulator:
         screen.fill((50, 50, 255))
         self.gameBoard.show(screen)
         pygame.display.flip()
-        pygame.time.wait(80)
+        #pygame.time.wait(80)
 
     # Check who won and register data accordingly 
     def checkWinner(self):
@@ -144,7 +144,7 @@ class Simulator:
 
             # After a match is over and a winner is decided we increment the matches count and reset the board         
             self.matchesPlayed += 1
-            pygame.time.wait(200)
+            #pygame.time.wait(100)
             self.gameBoard.reset()
             print(self.move_dict)
 
