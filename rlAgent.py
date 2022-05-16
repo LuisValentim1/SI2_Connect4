@@ -21,29 +21,15 @@ class RLAgent:
         #reward him for playing
         self.reward += 1 
 
-
-        #[print(b.print()) for b in board]
-        #read
         choice= None
 
-        #Use this code when read and write on file working
-        #
-        choice_rand = random.randint(0, 1)
+        choice_rand = random.uniform(0, 1)
         if choice_rand < self.epslon:
            choice=random.randint(0, 6)
         else:
             choice = self.read_choice(board, move_dict)
 
-        #and remove this 
-        #choice=random.randint(0, 6)
-
-        #confirm final reward for the choice
-        #
-        #
-
         #needs to store its choice on a file with its weight (reward)
-        #store
-        #self.save_choice()
 
         return choice
     
@@ -55,17 +41,17 @@ class RLAgent:
 
             self.reward += 100*nseq3
 
-    def wins(self, positions, move_dict):
+    def wins(self, move_dict):
         #if the last move wins the game reward him
         self.reward += 10000
 
-        self.reset(positions, move_dict)
+        self.reset(move_dict)
 
-    def loses(self, positions, move_dict):
+    def loses(self, move_dict):
         #if he loses reward him negatively
         self.reward -= 10000
 
-        self.reset(positions, move_dict)
+        self.reset(move_dict)
     
     def read_choice(self, board, move_dict):
         choices = []
@@ -87,7 +73,7 @@ class RLAgent:
         index = rewards.index(max_value)
         return index
 
-    def save_choice(self, positions, move_dict):
+    def save_choice(self, move_dict):
         #store its choice on a file with its weight (reward)
         with open(self.file, 'wb') as f:
             pickle.dump(move_dict, f)
@@ -115,13 +101,14 @@ class RLAgent:
     def print_board(self,board):
         [print(b.fill,end=",") for b in board]
 
-    def reset(self, positions, move_dict):
+    def reset(self, move_dict):
         self.no_games += 1
         self.epslon *= 0.985
         self.moves[-1].reward += self.learning_rate * (self.reward - self.moves[-1].reward)
         print(self.moves)
+        
         #store on file
-        self.save_choice(positions, move_dict)
+        self.save_choice(move_dict)
 
         self.moves = []
         self.reward = 0

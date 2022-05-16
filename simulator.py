@@ -82,7 +82,7 @@ class Simulator:
                 if move == 0:
                     self.gameBoard.winner = 2
                     if self.agent1.name == "RL Agent":
-                        self.agent1.loses(self.gameBoard.positions, self.move_dict)
+                        self.agent1.loses(self.move_dict)
 
                 # check for sequences of 3 and add the move used
                 if (self.agent1.name == "RL Agent"):
@@ -93,10 +93,10 @@ class Simulator:
                 a1_win = self.checkWinner()
                 # self.printSequences()
                 if a1_win == 1 and self.agent1.name == "RL Agent":
-                    self.agent1.wins(self.gameBoard.positions, self.move_dict)
+                    self.agent1.wins(self.move_dict)
 
                 if a1_win == 1 and self.agent2.name == "RL Agent":
-                    self.agent2.loses(self.gameBoard.positions, self.move_dict)
+                    self.agent2.loses(self.move_dict)
 
                 # if there is no winner its player 2's turn
                 if self.gameBoard.winner == "":
@@ -104,7 +104,7 @@ class Simulator:
                     if move == 0:
                         self.gameBoard.winner = 1
                         if self.agent2.name == "RL Agent":
-                            self.agent2.loses(self.gameBoard.positions, self.move_dict)
+                            self.agent2.loses(self.move_dict)
 
                     # check for sequences of 3 and add the move used
                     if self.agent2.name == "RL Agent":
@@ -116,10 +116,10 @@ class Simulator:
                     a2_win = self.checkWinner()
 
                     if a2_win == 1 and self.agent2.name == "RL Agent":
-                        self.agent2.wins(self.gameBoard.positions, self.move_dict)
+                        self.agent2.wins(self.move_dict)
 
                     if a2_win == 1 and self.agent1.name == "RL Agent":
-                        self.agent1.loses(self.gameBoard.positions, self.move_dict)
+                        self.agent1.loses(self.move_dict)
 
             # After a match is over and a winner is decided we increment the matches count and reset the board         
             self.matchesPlayed += 1
