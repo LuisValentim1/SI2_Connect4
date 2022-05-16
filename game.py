@@ -43,7 +43,7 @@ validPlays = ["1", "2", "3", "4", "5", "6", "7"]
 a1 = LeftMostAgent()
 a2 = RightMostAgent()
 aRandom = RandomAgent()
-aRl = RLAgent()
+aRl = RLAgent("RLAgent1",1)
 
 #decide the players here
 p1 = aRl
@@ -51,7 +51,7 @@ p2 = aRandom
 
 # Game board and simulator for agents to run automatically 
 gb = Board()
-sim = Simulator(p1, p2, 200, gb)
+sim = Simulator(p1, p2, 200, gb, "statsfile1.csv")
 
 
 

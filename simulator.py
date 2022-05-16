@@ -5,11 +5,12 @@ from board import Board
 from position import Position
 import pygame
 import os
+from rlAgent import RLAgent
 
 
 # Runs custom number of matches(numOfMatches) between 2 agents(agent1 and agent2) automatically
 class Simulator:
-    def __init__(self, agent1, agent2, numOfMatches, gameBoard: Board):
+    def __init__(self, agent1, agent2, numOfMatches, gameBoard: Board, stats_file_name):
         self.agent1 = agent1
         self.agent2 = agent2
         self.numOfMatches = numOfMatches
@@ -17,18 +18,27 @@ class Simulator:
         self.matchesPlayed = 0
         self.a1Wins = 0
         self.a2Wins = 0
+        self.a1PartialWins = 0
+        self.a2PartialWins = 0
         self.numOfDraws = 0
         self.drawPercentage = 0
         self.a1WinPercentage = 0
         self.a2WinPercentage = 0
+        self.a1PartialWinPercentage = 0
+        self.a2PartialWinPercentage = 0
+        self.last_game_save = 0
         self.move_dict = {}
-        if os.path.exists(self.agent1.file):
-            with open(agent1.file, "rb") as f:
+        if isinstance(self.agent1, RLAgent) and os.path.exists(self.agent1.file):
+            with open(self.agent1.file, "rb") as f:
+                self.move_dict = pickle.load(f)
+        elif isinstance(self.agent2, RLAgent) and os.path.exists(self.agent2.file):
+            with open(self.agent2.file, "rb") as f:
                 self.move_dict = pickle.load(f)
         counter = 0
         for key in self.move_dict.keys():
             counter += len(self.move_dict[key])
 
+        self.stats_file = stats_file_name
         print(counter)
 
 
@@ -36,6 +46,8 @@ class Simulator:
     def calcWinRates(self):
         self.a1WinPercentage = (self.a1Wins / self.matchesPlayed) * 100
         self.a2WinPercentage = (self.a2Wins / self.matchesPlayed) * 100
+        self.a1PartialWinPercentage = (self.a1PartialWins / (self.matchesPlayed - self.last_game_save)) * 100
+        self.a2PartialWinPercentage = (self.a2PartialWins / (self.matchesPlayed - self.last_game_save)) * 100
 
     # Printing function with results of a given simulation
     def show(self):
@@ -55,16 +67,18 @@ class Simulator:
         screen.fill((50, 50, 255))
         self.gameBoard.show(screen)
         pygame.display.flip()
-        pygame.time.wait(100)
+        pygame.time.wait(80)
 
     # Check who won and register data accordingly 
     def checkWinner(self):
         choice = self.gameBoard.checkWinner()
-        if (self.gameBoard.winner == 1):
+        if self.gameBoard.winner == 1:
             self.a1Wins += 1
-        if (self.gameBoard.winner == 2):
+            self.a1PartialWins += 1
+        if self.gameBoard.winner == 2:
             self.a2Wins += 1
-        if (self.gameBoard.winner == "draw"):
+            self.a2PartialWins += 1
+        if self.gameBoard.winner == "draw":
             self.numOfDraws += 1
         return choice
 
@@ -73,6 +87,11 @@ class Simulator:
 
         # Run for as long as the matches played is inferior the the total number of matches 
         while self.matchesPlayed < self.numOfMatches:
+            if self.matchesPlayed % 20 == 0 and self.matchesPlayed > 1:
+                self.calcWinRates()
+                self.save_stats()
+                self.reset_partial_stats()
+
             pygame.event.pump()
             # Run a match for as long as the winner is not decided 
             while self.gameBoard.winner == "":
@@ -125,14 +144,31 @@ class Simulator:
 
             # After a match is over and a winner is decided we increment the matches count and reset the board         
             self.matchesPlayed += 1
-            pygame.time.wait(1000)
+            pygame.time.wait(200)
             self.gameBoard.reset()
             print(self.move_dict)
 
         # After every match has been played, calculate statistics and show results
         self.calcWinRates()
         self.show()
+        self.save_stats()
         return False
+
+    def save_stats(self):
+        text = f"{self.matchesPlayed-self.last_game_save},{self.a1PartialWins},{self.a1PartialWinPercentage},{self.a2PartialWins},{self.a2PartialWinPercentage}\n"
+        if os.path.exists(self.stats_file):
+            with open(self.stats_file, "a") as f:
+                f.write(text)
+        else:
+            with open(self.stats_file, "w") as f:
+                f.write(text)
+
+    def reset_partial_stats(self):
+        self.a1PartialWins = 0
+        self.a1PartialWinPercentage = 0
+        self.a2PartialWins = 0
+        self.a2PartialWinPercentage = 0
+        self.last_game_save = self.matchesPlayed
 
     # Debug tool
     def printSequences(self):

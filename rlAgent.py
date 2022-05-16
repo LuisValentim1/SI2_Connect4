@@ -5,21 +5,22 @@ import pickle
 
 class RLAgent:
 
-    def __init__(self):
+    def __init__(self, filename, player_num):
         self.name = "RL Agent"
         self.reward = 0
         self.no_games = 0
         self.no_seq3 = 0
-        self.file = "RLAgent1"
+        self.file = filename
         self.epslon = 1
         self.learning_rate = 0.1
         self.moves = []
+        self.player_num = player_num
 
     def play(self, board, move_dict):
         #define rewards for each play
 
         #reward him for playing
-        self.reward += 1 
+        self.reward += 1
 
         choice= None
 
@@ -32,7 +33,7 @@ class RLAgent:
         #needs to store its choice on a file with its weight (reward)
 
         return choice
-    
+
     def seq3(self, no_seq3):
         #reward him for making a sequence of 3
         if no_seq3 > self.no_seq3:
@@ -52,15 +53,14 @@ class RLAgent:
         self.reward -= 10000
 
         self.reset(move_dict)
-    
+
     def read_choice(self, board, move_dict):
         choices = []
         for row in range(7):
             for col in range(6):
                 if board[col * 7 + row].fill == 0:
                     new_board = [b.copy() for b in board]
-                    #TODO CHANGE TO THE NUMBER OF THE AGENT
-                    new_board[col * 7 + row].fill = 1
+                    new_board[col * 7 + row].fill = self.player_num
                     move = self.find_move_using_board(new_board, move_dict)
                     move.choice = row
                     choices.append(move)
@@ -106,7 +106,7 @@ class RLAgent:
         self.epslon *= 0.985
         self.moves[-1].reward += self.learning_rate * (self.reward - self.moves[-1].reward)
         print(self.moves)
-        
+
         #store on file
         self.save_choice(move_dict)
 
