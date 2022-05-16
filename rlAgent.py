@@ -71,7 +71,7 @@ class RLAgent:
         rewards = [c.reward for c in choices]
         max_value = max(rewards)
         index = rewards.index(max_value)
-        return index
+        return choices[index].choice
 
     def save_choice(self, move_dict):
         #store its choice on a file with its weight (reward)
