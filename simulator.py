@@ -4,6 +4,7 @@ from sequence import Sequence
 from board import Board
 from position import Position
 import pygame
+import os
 
 
 # Runs custom number of matches(numOfMatches) between 2 agents(agent1 and agent2) automatically
@@ -21,8 +22,9 @@ class Simulator:
         self.a1WinPercentage = 0
         self.a2WinPercentage = 0
         self.move_dict = {}
-        with open(agent1.file,"rb") as f:
-            self.move_dict = pickle.load(f)
+        if os.path.exists(self.agent1.file):
+            with open(agent1.file, "rb") as f:
+                self.move_dict = pickle.load(f)
         counter = 0
         for key in self.move_dict.keys():
             counter += len(self.move_dict[key])
