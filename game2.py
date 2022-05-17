@@ -1,4 +1,5 @@
 # Imports
+from oslaAgent import oslaAgent
 from rlAgent import RLAgent
 from sequence import Sequence
 from board import Board 
@@ -11,7 +12,7 @@ import pygame
 
 
 
-# GAME FOR RLAgent as PLAYER 2
+
 # --------------------------- PRE GAME SETUPS --------------------------------------------
 pygame.init()
 
@@ -43,15 +44,16 @@ validPlays = ["1", "2", "3", "4", "5", "6", "7"]
 a1 = LeftMostAgent()
 a2 = RightMostAgent()
 aRandom = RandomAgent()
-aRl = RLAgent("RLAgent2",2)
+aOsla = oslaAgent(1)
+aRl = RLAgent("RLAgent2_v2",2)
 
 #decide the players here
 p2 = aRl
-p1 = aRandom
+p1 = aOsla
 
 # Game board and simulator for agents to run automatically 
 gb = Board()
-sim = Simulator(p1, p2, 20000, gb, "statsfile2.csv")
+sim = Simulator(p1, p2, 20000, gb, "statsfile2v2.csv")
 
 
 

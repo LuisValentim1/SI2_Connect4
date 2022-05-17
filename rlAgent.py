@@ -19,7 +19,7 @@ class RLAgent:
 
     def play(self, board, move_dict):
         #define rewards for each play
-
+        board_pos = board.positions
         #reward him for playing
         self.reward += 1
 
@@ -29,7 +29,7 @@ class RLAgent:
         if choice_rand < self.epslon:
            choice=random.randint(0, 6)
         else:
-            choice = self.read_choice(board, move_dict)
+            choice = self.read_choice(board_pos, move_dict)
 
         #needs to store its choice on a file with its weight (reward)
 
@@ -105,6 +105,8 @@ class RLAgent:
     def reset(self, move_dict):
         self.no_games += 1
         self.epslon *= 0.9995
+        if self.moves.__len__()<0:
+            print("Did not make a move, should not happen!")
         self.moves[-1].reward += self.learning_rate * (self.reward - self.moves[-1].reward)
         rev_moves = self.moves[-2:]
         for i, move in enumerate(rev_moves):

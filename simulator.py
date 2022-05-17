@@ -103,7 +103,7 @@ class Simulator:
                 # Each agent takes turns making a move, the system verifies if someone won and refreshes the board after every move
                 # 0 is the return on an invalid play, so if a player makes an invalid move 
                 # such as trying to play in a filled column or a non valid input the system will ask for a new play
-                move = self.gameBoard.placePiece(self.agent1.play(self.gameBoard.positions, self.move_dict), 1)
+                move = self.gameBoard.placePiece(self.agent1.play(self.gameBoard, self.move_dict), 1)
                 if move == 0:
                     self.gameBoard.winner = 2
                     if self.agent1.name == "RL Agent":
@@ -119,13 +119,13 @@ class Simulator:
                 # self.printSequences()
                 if a1_win == 1 and self.agent1.name == "RL Agent":
                     self.agent1.wins(self.move_dict)
-
+                
                 if a1_win == 1 and self.agent2.name == "RL Agent":
-                    self.agent2.loses(self.move_dict)
+                        self.agent2.loses(self.move_dict)
 
                 # if there is no winner its player 2's turn
                 if self.gameBoard.winner == "":
-                    move = self.gameBoard.placePiece(self.agent2.play(self.gameBoard.positions, self.move_dict), 2)
+                    move = self.gameBoard.placePiece(self.agent2.play(self.gameBoard, self.move_dict), 2)
                     if move == 0:
                         self.gameBoard.winner = 1
                         if self.agent2.name == "RL Agent":

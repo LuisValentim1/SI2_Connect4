@@ -1,4 +1,5 @@
 # Imports
+from oslaAgent import oslaAgent
 from rlAgent import RLAgent
 from sequence import Sequence
 from board import Board 
@@ -43,11 +44,12 @@ validPlays = ["1", "2", "3", "4", "5", "6", "7"]
 a1 = LeftMostAgent()
 a2 = RightMostAgent()
 aRandom = RandomAgent()
+aOsla = oslaAgent(2)
 aRl = RLAgent("RLAgent1v2",1)
 
 #decide the players here
 p1 = aRl
-p2 = aRandom
+p2 = aOsla
 
 # Game board and simulator for agents to run automatically 
 gb = Board()

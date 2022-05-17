@@ -1,21 +1,22 @@
 from position import Position 
 from sequence import Sequence 
 import pygame
+import copy
 
 class Board:
 
-    positions = []
+    def __init__(self): 
+        self._sequences = []
+        self._positions = []
 
-    def __init__(self):   
         y = 0
         while y < 6:
             x = 0
             while x < 7:
-                self.positions.append(Position(x,y))
+                self._positions.append(Position(x,y))
                 x = x+1
             y = y+1
         self.winner=""
-        self.sequences = []
 
     # set a piece in a position
     def placePiece(self, x, player):
@@ -42,7 +43,7 @@ class Board:
         for pos in self.positions:
             pos.fill = 0
         self.winner = ""
-        self.sequences = []
+        self._sequences = []
 
     # check which sequences active and who they belong tho
     def gameState(self):
@@ -72,7 +73,7 @@ class Board:
                         seq.addPieceAtTheStart(pos)
             for aSeq in altSequences:
                 curSequences.append(aSeq)
-        self.sequences = curSequences
+        self._sequences = curSequences
 
     # verify if there's any winning sequence 
     def checkWinner(self):
@@ -117,6 +118,19 @@ class Board:
             if seq.player == playerNum and seq.length==seqLen:
                 retSeqs.append(seq)
         return retSeqs
+
+    def copy_stats(self, positions, sequences):
+        self._positions = copy.deepcopy(positions)
+        self._sequences = copy.deepcopy(sequences)
+        return
+
+    @property
+    def sequences(self):
+        return self._sequences
+
+    @property
+    def positions(self):
+        return self._positions
 
 
 
