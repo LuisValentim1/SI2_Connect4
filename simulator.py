@@ -87,10 +87,14 @@ class Simulator:
 
         # Run for as long as the matches played is inferior the the total number of matches 
         while self.matchesPlayed < self.numOfMatches:
-            if self.matchesPlayed % 20 == 0 and self.matchesPlayed > 1:
+            if self.matchesPlayed % 200 == 0 and self.matchesPlayed > 1:
                 self.calcWinRates()
                 self.save_stats()
                 self.reset_partial_stats()
+                if isinstance(self.agent1, RLAgent):
+                    self.agent1.save_choice(self.move_dict)
+                elif isinstance(self.agent2, RLAgent):
+                    self.agent2.save_choice(self.move_dict)
 
             pygame.event.pump()
             # Run a match for as long as the winner is not decided 
@@ -146,7 +150,7 @@ class Simulator:
             self.matchesPlayed += 1
             #pygame.time.wait(100)
             self.gameBoard.reset()
-            print(self.move_dict)
+            #print(self.move_dict)
 
         # After every match has been played, calculate statistics and show results
         self.calcWinRates()

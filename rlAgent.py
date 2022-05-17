@@ -12,9 +12,10 @@ class RLAgent:
         self.no_seq3 = 0
         self.file = filename
         self.epslon = 1
-        self.learning_rate = 0.1
+        self.learning_rate = 0.15
         self.moves = []
         self.player_num = player_num
+        self.discount_factor = 0.4
 
     def play(self, board, move_dict):
         #define rewards for each play
@@ -103,12 +104,15 @@ class RLAgent:
 
     def reset(self, move_dict):
         self.no_games += 1
-        self.epslon *= 0.9
+        self.epslon *= 0.9995
         self.moves[-1].reward += self.learning_rate * (self.reward - self.moves[-1].reward)
+        rev_moves = self.moves[-2:]
+        for i, move in enumerate(rev_moves):
+            move.reward += self.learning_rate * self.discount_factor * rev_moves[i-1].reward
         print(self.moves)
 
         #store on file
-        self.save_choice(move_dict)
+        #self.save_choice(move_dict)
 
         self.moves = []
         self.reward = 0
