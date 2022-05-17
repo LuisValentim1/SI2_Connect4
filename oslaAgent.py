@@ -7,7 +7,7 @@ import copy
 class oslaAgent:
 
     def __init__(self, player_num):
-        self.name = "osla Agent"
+        self.name = "OSLA Agent"
         self.no_seq3 = 0
         self.player_num = player_num
         self.simBoard = Board()
