@@ -121,7 +121,7 @@ class Simulator:
                         self.agent1.wins(self.move_dict)
                     
                     if a1_win == 1 and self.agent2.name == "RL Agent":
-                            self.agent2.loses(self.move_dict)
+                        self.agent2.loses(self.move_dict)
 
                 # if there is no winner its player 2's turn
                 if self.gameBoard.winner == "":

@@ -1,6 +1,7 @@
 import random
 from move import Move
 import pickle
+import time
 
 
 class RLAgent:
@@ -69,10 +70,13 @@ class RLAgent:
         #read from file and choose the next move
         #depending on the weights stored for each possible decision (in this case 7)
 
-        rewards = [c.reward for c in choices]
-        max_value = max(rewards)
-        index = rewards.index(max_value)
-        return choices[index].choice
+        try:
+            rewards = [c.reward for c in choices]
+            max_value = max(rewards)
+            index = rewards.index(max_value)
+            return choices[index].choice
+        except:
+            return 0
 
     def save_choice(self, move_dict):
         #store its choice on a file with its weight (reward)
