@@ -12,7 +12,7 @@ import pygame
 
 
 
-
+# RL Agent vs RL Agent
 # --------------------------- PRE GAME SETUPS --------------------------------------------
 pygame.init()
 
@@ -44,20 +44,21 @@ validPlays = ["1", "2", "3", "4", "5", "6", "7"]
 a1 = LeftMostAgent()
 a2 = RightMostAgent()
 aRandom = RandomAgent()
-aOsla = oslaAgent(1)
-aRl = RLAgent("RLAgent2_v2",2)
+aOsla = oslaAgent(2)
+aRl = RLAgent("RLAgent1v3",1)
+aRl2 = RLAgent("RLAgent2v3",2)
 
 #decide the players here
-p2 = aRl
-p1 = aOsla
+p1 = aRl
+p2 = aRl2
 
 # Game board and simulator for agents to run automatically 
 gb = Board()
-sim = Simulator(p1, p2, 6000, gb, "statsfile2v2.csv")
+sim = Simulator(p1, p2, 10000, gb, "statsfile1_rl.csv")
 
 
 
-# RL Agent as player 2
+
 # ---------------------------- GAME CYCLE -----------------------------------------------
 # Run until the user asks to quit
 running = True
