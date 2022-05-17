@@ -104,7 +104,7 @@ class RLAgent:
 
     def reset(self, move_dict):
         self.no_games += 1
-        self.epslon *= 0.9995
+        self.epslon *= 0.95
         if self.moves.__len__()<0:
             print("Did not make a move, should not happen!")
         self.moves[-1].reward += self.learning_rate * (self.reward - self.moves[-1].reward)

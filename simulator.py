@@ -93,7 +93,7 @@ class Simulator:
                 self.reset_partial_stats()
                 if isinstance(self.agent1, RLAgent):
                     self.agent1.save_choice(self.move_dict)
-                elif isinstance(self.agent2, RLAgent):
+                if isinstance(self.agent2, RLAgent):
                     self.agent2.save_choice(self.move_dict)
 
             pygame.event.pump()
@@ -108,20 +108,20 @@ class Simulator:
                     self.gameBoard.winner = 2
                     if self.agent1.name == "RL Agent":
                         self.agent1.loses(self.move_dict)
+                else:
+                    # check for sequences of 3 and add the move used
+                    if (self.agent1.name == "RL Agent"):
+                        self.agent1.seq3(self.gameBoard.getSequencesFromPlayerWithLength(3, 1).__len__())
+                        self.agent1.add_move(self.gameBoard.positions, self.move_dict)
 
-                # check for sequences of 3 and add the move used
-                if (self.agent1.name == "RL Agent"):
-                    self.agent1.seq3(self.gameBoard.getSequencesFromPlayerWithLength(3, 1).__len__())
-                    self.agent1.add_move(self.gameBoard.positions, self.move_dict)
-
-                self.refresh(screen)
-                a1_win = self.checkWinner()
-                # self.printSequences()
-                if a1_win == 1 and self.agent1.name == "RL Agent":
-                    self.agent1.wins(self.move_dict)
-                
-                if a1_win == 1 and self.agent2.name == "RL Agent":
-                        self.agent2.loses(self.move_dict)
+                    self.refresh(screen)
+                    a1_win = self.checkWinner()
+                    # self.printSequences()
+                    if a1_win == 1 and self.agent1.name == "RL Agent":
+                        self.agent1.wins(self.move_dict)
+                    
+                    if a1_win == 1 and self.agent2.name == "RL Agent":
+                            self.agent2.loses(self.move_dict)
 
                 # if there is no winner its player 2's turn
                 if self.gameBoard.winner == "":

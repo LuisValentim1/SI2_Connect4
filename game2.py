@@ -53,7 +53,7 @@ p1 = aOsla
 
 # Game board and simulator for agents to run automatically 
 gb = Board()
-sim = Simulator(p1, p2, 20000, gb, "statsfile2v2.csv")
+sim = Simulator(p1, p2, 6000, gb, "statsfile2v2.csv")
 
 
 
