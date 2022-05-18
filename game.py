@@ -45,7 +45,7 @@ a1 = LeftMostAgent()
 a2 = RightMostAgent()
 aRandom = RandomAgent()
 aOsla = oslaAgent(2)
-aRl = RLAgent("RLAgent1v2",1)
+aRl = RLAgent("RLAgent1",1)
 
 #decide the players here
 p1 = aRl
@@ -53,7 +53,7 @@ p2 = aOsla
 
 # Game board and simulator for agents to run automatically 
 gb = Board()
-sim = Simulator(p1, p2, 6000, gb, "statsfile1v2.csv")
+sim = Simulator(p1, p2, 60000, gb, "statsfile1.csv")
 
 
 
